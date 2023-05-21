@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public class TodoServiceImpl implements TodoService {
-    private static List<Todo> todos;
+    public static List<Todo> todos;
 
 
     public TodoServiceImpl() {
