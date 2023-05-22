@@ -1,14 +1,18 @@
 package com.fcai.SoftwareTesting.todo;
 
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TodoServiceImpl implements TodoService {
-    public static List<Todo> todos;
-
+    public  List<Todo> todos;
+    public  List<Todo> todos2;
+    private TodoService todoService;
+    
+    public TodoServiceImpl(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     public TodoServiceImpl() {
         todos = new ArrayList<Todo>();
@@ -74,7 +78,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void delete(String id) {
-        Todo todo = read(id);
+        Todo todo = todoService.read(id);
         todos.remove(todo);
     }
 
