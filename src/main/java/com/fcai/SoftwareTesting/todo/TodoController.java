@@ -1,10 +1,10 @@
 package com.fcai.SoftwareTesting.todo;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 
 @RestController("/todo")
 @CrossOrigin(origins = "*")
@@ -12,6 +12,15 @@ public class TodoController {
 
     @Autowired
     private TodoService todoService = new TodoServiceImpl();
+
+    // create default constructor
+    public TodoController(){
+    }
+
+    // create this constructor to used in mock
+    public TodoController(TodoService todoService){
+        this.todoService = todoService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Todo> create(@RequestBody TodoCreateRequest todo) {

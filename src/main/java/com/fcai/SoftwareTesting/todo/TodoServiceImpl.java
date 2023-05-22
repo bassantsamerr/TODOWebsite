@@ -7,7 +7,6 @@ import java.util.List;
 @Service
 public class TodoServiceImpl implements TodoService {
     public  List<Todo> todos;
-    public  List<Todo> todos2;
     private TodoService todoService;
     
     public TodoServiceImpl(TodoService todoService) {
@@ -71,7 +70,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo update(String id, boolean completed) {
-        Todo todo = read(id);
+        Todo todo = todoService.read(id);
         todo.setCompleted(completed);
         return todo;
     }
