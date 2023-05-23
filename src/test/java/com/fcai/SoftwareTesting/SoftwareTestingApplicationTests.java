@@ -61,6 +61,7 @@ class SoftwareTestingApplicationTests {
 	@Test
 	public void create_todo_descrption_empty_testing() {
 		TodoCreateRequest todo=new TodoCreateRequest();
+		todo.setTitle("");
 		todo.setDescription("");
 		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.create(todo));
 	}
