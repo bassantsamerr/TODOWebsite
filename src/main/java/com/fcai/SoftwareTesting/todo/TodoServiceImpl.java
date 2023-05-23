@@ -70,14 +70,28 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo update(String id, boolean completed) {
-        Todo todo = todoService.read(id);
+        Todo todo;
+        // we added this condition to handle the mocking process
+        if(todoService == null){
+            todo = read(id);
+        }
+        else{
+            todo = todoService.read(id);
+        }
         todo.setCompleted(completed);
         return todo;
     }
 
     @Override
     public void delete(String id) {
-        Todo todo = todoService.read(id);
+        Todo todo;
+        // we added this condition to handle the mocking process
+        if(todoService == null){
+            todo = read(id);
+        }
+        else{
+            todo = todoService.read(id);
+        }
         todos.remove(todo);
     }
 

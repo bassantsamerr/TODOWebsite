@@ -1,6 +1,5 @@
 package com.fcai.SoftwareTesting;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,19 +51,22 @@ class SoftwareTestingApplicationTests {
 		TodoCreateRequest todo = null;
 		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.create(todo));
 	}
+
 	@Test
 	public void create_todo_title_empty_testing() {
-		TodoCreateRequest todo=new TodoCreateRequest();
+		TodoCreateRequest todo = new TodoCreateRequest();
 		todo.setTitle("");
 		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.create(todo));
 	}
+
 	@Test
 	public void create_todo_descrption_empty_testing() {
-		TodoCreateRequest todo=new TodoCreateRequest();
-		todo.setTitle("");
+		TodoCreateRequest todo = new TodoCreateRequest();
+		todo.setTitle("title");
 		todo.setDescription("");
 		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.create(todo));
 	}
+
 	@Test
     public void create_happy_senario_testing() {
         TodoCreateRequest todo = new TodoCreateRequest();
@@ -76,6 +78,7 @@ class SoftwareTestingApplicationTests {
 		assertEquals("Finish Graph Coverage", createdTodo.getDescription());
 		assertFalse(createdTodo.isCompleted());
     }
+	
 	@Test
 	public void read_null_id_testing() {
 		String id = null;
@@ -144,6 +147,27 @@ class SoftwareTestingApplicationTests {
 		verify(todoServiceMock).read("1");
     }
 
+	@Test
+	public void delete_bug_senario_testing() {
+		Todo todo1 = new Todo();
+        todo1.setId("1");
+
+		Todo todo2 = new Todo();
+        todo2.setId("2");
+
+		todoServiceImplMockedInjected.todos = new ArrayList<Todo>();
+		todoServiceImplMockedInjected.todos.add(todo1);
+		todoServiceImplMockedInjected.todos.add(todo2);
+		
+		when(todoServiceMock.read("1")).thenReturn(todo1);
+		
+		todoServiceImplMockedInjected.delete("1");
+
+		verify(todoServiceMock).read("1");
+
+		assertEquals("1" , todoServiceImplMockedInjected.todos.get(0).getId());	
+    }
+
     @Test
     public void delete_throwing_exception_testing() {
         when(todoServiceMock.read("111")).thenThrow(IllegalArgumentException.class);
@@ -178,11 +202,13 @@ class SoftwareTestingApplicationTests {
 
 		verify(todoServiceMock).read("111");
     }
+
 	@Test
 	public void list_null_testing() {
-		todoServiceImpl.todos=null;
-		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.list());
+		todoServiceImpl.todos = null;
+		assertThrows(IllegalArgumentException.class, ()->todoServiceImpl.list());
 	}
+
 	@Test
 	public void list_with_added_elements_testing() {
 		Todo todo1 = new Todo("1", "Software Testing", "description1", true);
@@ -193,19 +219,22 @@ class SoftwareTestingApplicationTests {
 		assertEquals("Software Testing", todoServiceImpl.list().get(0).getTitle());
 		assertEquals("description1", todoServiceImpl.list().get(0).getDescription());
 	}
+
 	@Test
 	public void listCompleted_null_testing() {
-		todoServiceImpl.todos=null;
-		assertThrows(IllegalArgumentException.class,()->todoServiceImpl.listCompleted());
+		todoServiceImpl.todos = null;
+		assertThrows(IllegalArgumentException.class, ()->todoServiceImpl.listCompleted());
 	}
+
 	@Test
-	public void listCompleted_with_no_completed_todos_testing() {
+	public void listCompleted_with_no_completed_todos_testing(){
 		Todo todo1 = new Todo("1", "Software Testing", "description1", false);
 		todoServiceImpl.todos.add(todo1);
-		assertEquals(0,todoServiceImpl.listCompleted().size());
+		assertEquals(0, todoServiceImpl.listCompleted().size());
 	}
+	
 	@Test
-	public void listCompleted_with_completed_todos_testing() {
+	public void listCompleted_with_completed_todos_testing(){
 		Todo todo1 = new Todo("1", "Software Testing", "description1", true);
 		todoServiceImpl.todos.add(todo1);
 		assertEquals(1,todoServiceImpl.listCompleted().size());
@@ -215,9 +244,7 @@ class SoftwareTestingApplicationTests {
 	@Test
 	public void create_controller_happy_senario_testing(){
 		TodoCreateRequest todo = new TodoCreateRequest();
-        todo.setTitle("Testying Assignment");
-        todo.setDescription("Finish Graph Coverage");
-        Todo createdTodo = todoServiceImpl.create(todo);
+		Todo createdTodo = null;
 
 		when(todoServiceImplMock.create(todo)).thenReturn(createdTodo);
 
@@ -225,6 +252,7 @@ class SoftwareTestingApplicationTests {
 
 		verify(todoServiceImplMock).create(todo);
 	}
+
 	@Test
 	public void create_controller_exception_testing(){
 		when(todoServiceImplMock.create(null)).thenThrow(IllegalArgumentException.class);
@@ -233,6 +261,7 @@ class SoftwareTestingApplicationTests {
 
 		verify(todoServiceImplMock).create(null);
 	}
+	
 	@Test
 	public void read_controller_happy_senario_testing(){
 		Todo todo = new Todo();
@@ -292,18 +321,18 @@ class SoftwareTestingApplicationTests {
 
 		verify(todoServiceImplMock).update("1", true);
 	}
+
 	@Test
 	public void list_controller_happy_senario_testing(){
-		Todo todo1 = new Todo("1", "Software Testing", "description1", true);
-		todoServiceImpl.todos.add(todo1);
-		List<Todo> returnedTodos=new ArrayList<Todo>();
-		returnedTodos.add(todo1);
+		List<Todo> returnedTodos = new ArrayList<Todo>();
+
 		when(todoServiceImplMock.list()).thenReturn(returnedTodos);
 
 		assertEquals(HttpStatus.OK, todoControllerMockedInjected.list().getStatusCode());
 
 		verify(todoServiceImplMock).list();
 	}
+
 	@Test
 	public void list_controller_exception_testing(){
 		when(todoServiceImplMock.list()).thenThrow(IllegalArgumentException.class);
@@ -312,18 +341,18 @@ class SoftwareTestingApplicationTests {
 
 		verify(todoServiceImplMock).list();
 	}
+
 	@Test
 	public void listCompleted_controller_happy_senario_testing(){
-		Todo todo1 = new Todo("1", "Software Testing", "description1", true);
-		todoServiceImpl.todos.add(todo1);
-		List<Todo> completedTodos=new ArrayList<Todo>();
-		completedTodos.add(todo1);
+		List<Todo> completedTodos  = new ArrayList<Todo>();
+	
 		when(todoServiceImplMock.listCompleted()).thenReturn(completedTodos);
 
 		assertEquals(HttpStatus.OK, todoControllerMockedInjected.listCompleted().getStatusCode());
 
 		verify(todoServiceImplMock).listCompleted();
 	}
+
 	@Test
 	public void listCompleted_controller_exception_testing(){
 		when(todoServiceImplMock.listCompleted()).thenThrow(IllegalArgumentException.class);

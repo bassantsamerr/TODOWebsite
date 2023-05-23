@@ -1,0 +1,37 @@
+1- in the TodoServiceImpl we made a todos list not to be static
+----> public  List<Todo> todos;
+
+2- we added a private object from TodoService class
+----> private TodoService todoService;
+
+3- we added one addtional paramiterized constructor that takes object TodoService as a parameter
+----> public TodoServiceImpl(TodoService todoService) {
+        this.todoService = todoService;
+    }
+
+4- in the update function we add a condition to make sure that we are handling mocking process
+----> public Todo update(String id, boolean completed) {
+        Todo todo;
+        // we added this condition to handle the mocking process
+        if(todoService == null){
+            todo = read(id);
+        }
+        else{
+            todo = todoService.read(id);
+        }
+        todo.setCompleted(completed);
+        return todo;
+    }
+
+5- in the delete function we add a condition to make sure that we are handling mocking process
+----> public void delete(String id) {
+        Todo todo;
+        // we added this condition to handle the mocking process
+        if(todoService == null){
+            todo = read(id);
+        }
+        else{
+            todo = todoService.read(id);
+        }
+        todos.remove(todo);
+    }
